@@ -1,0 +1,1 @@
+Admin , user vs data yorumları birden fazla olabilir . adminComments string[] olarak mı tutulacak ?

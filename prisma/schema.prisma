@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+
+}
+
+model File {
+  id             Int       @id @default(autoincrement())
+  fileName       String    @default("")
+  fileDesc       String?   @default("")
+  filePath       String    @default("")
+  fileExt        String    @default("")
+  dataCount      Int?
+  dataSyncStatus Boolean   @default(false)
+  dataSyncDate   DateTime?
+  dataSyncResult String?   @default("")
+
+
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime? @db.Timestamptz(6)
+  version   Int       @default(1)
+  flags     String[]
+
+  Data Data[]
+}
+
+model callStatus {
+  id    Int    @id @default(autoincrement())
+  title String @unique @default("")
+  Data  Data[]
+}
+
+model Data {
+  id        Int         @id @default(autoincrement())
+  file      File?       @relation(fields: [fileId], references: [id])
+  fileId    Int?
+  // Diğer alanlar buraya gelecek name phone vs . ....
+  phone     String
+  name      String
+  email     String?     @default("")
+  adress    String?     @default("")
+  ip        String?     @default("")
+  info1     String?     @default("")
+  info2     String?     @default("")
+  info3     String?     @default("")
+  status    callStatus? @relation(fields: [statusId], references: [id])
+  statusId  Int?        @default(1)
+  //status arandı, aranmadı,arandı olumsuz, başarılı, başarısız yanlış kiş, numara kullanılmıyor.
+  createdAt DateTime    @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime    @default(now()) @updatedAt
+  deletedAt DateTime?   @db.Timestamptz(6)
+  version   Int         @default(1)
+  flags     String[]
+
+  DataStatusHistory DataStatusHistory[]
+}
+
+model Person {
+
+  id       Int    @id @default(autoincrement())
+  name     String
+  email    String @unique
+  password String
+
+  DataStatusHistory DataStatusHistory[]
+}
+
+model DataStatusHistory {
+
+  id             Int       @id @default(autoincrement())
+  data           Data?     @relation(fields: [dataId], references: [id])
+  dataId         Int?
+  changePerson   Person?   @relation(fields: [changePersonId], references: [id])
+  changePersonId Int?
+  createdAt      DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime  @default(now()) @updatedAt
+  deletedAt      DateTime? @db.Timestamptz(6)
+}

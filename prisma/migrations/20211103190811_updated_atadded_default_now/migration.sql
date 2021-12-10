@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE "Data" ALTER COLUMN "updatedAt" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "DataStatusHistory" ALTER COLUMN "updatedAt" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "File" ALTER COLUMN "dataCount" DROP NOT NULL;
